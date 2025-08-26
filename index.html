@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Name — Portfolio</title>
+  <meta name="description" content="Simple, fast, single‑file portfolio. Replace content with your details." />
+  <meta name="theme-color" content="#0ea5e9" />
+  <meta property="og:title" content="Your Name — Portfolio" />
+  <meta property="og:description" content="Simple, fast, single‑file portfolio." />
+  <style>
+    /* ---------- Base & Theme ---------- */
+    :root {
+      --bg: #ffffff;
+      --text: #0f172a;   /* slate-900 */
+      --muted: #475569;  /* slate-600 */
+      --primary: #0ea5e9; /* sky-500 */
+      --primary-ink: #041b23;
+      --card: #f8fafc;   /* slate-50 */
+      --border: #e2e8f0; /* slate-200 */
+      --shadow: 0 10px 25px rgba(2, 6, 23, 0.08);
+      --radius: 16px;
+      --radius-lg: 20px;
+      --container: 1100px;
+    }
+    [data-theme="dark"] {
+      --bg: #0b1220;     /* deep slate */
+      --text: #e5e7eb;   /* slate-200 */
+      --muted: #94a3b8;  /* slate-400 */
+      --primary: #38bdf8; /* sky-400 */
+      --primary-ink: #05151b;
+      --card: #0f172a;   /* slate-900 */
+      --border: #1f2937; /* slate-800 */
+      --shadow: 0 10px 25px rgba(0,0,0,0.35);
+    }
+    @media (prefers-color-scheme: dark) {
+      html:not([data-theme="light"]) {
+        --bg: #0b1220;
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --primary: #38bdf8;
+        --primary-ink: #05151b;
+        --card: #0f172a;
+        --border: #1f2937;
+        --shadow: 0 10px 25px rgba(0,0,0,0.35);
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: var(--container); margin-inline: auto; padding-inline: 1rem; }
+    .section { padding: 80px 0; }
+    .eyebrow { letter-spacing: .12em; text-transform: uppercase; font-size: .8rem; color: var(--muted); }
+    .h1 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; margin: 10px 0 14px; }
+    .h2 { font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin: 0 0 12px; }
+
+    /* ---------- Header ---------- */
+    .skip { position: absolute; left: -999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    .skip:focus { left: 16px; top: 16px; width: auto; height: auto; padding: 8px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
+
+    header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,.6);
+      backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    [data-theme="dark"] header { background: rgba(15, 23, 42, 0.6); }
+
+    .navwrap { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+    .brand { display: inline-flex; align-items: center; gap: .6rem; font-weight: 700; color: var(--text); text-decoration: none; }
+    .brand .dot { width: 10px; height: 10px; border-radius: 999px; background: var(--primary); box-shadow: 0 0 0 6px color-mix(in oklab, var(--primary) 25%, transparent); }
+
+    nav a { margin-inline: .75rem; color: var(--muted); font-weight: 600; }
+    nav a.active, nav a:hover { color: var(--text); text-decoration: none; }
+
+    .controls { display: flex; gap: .5rem; align-items: center; }
+    .iconbtn { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 8px 10px; box-shadow: var(--shadow); cursor: pointer; }
+    .iconbtn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+    .menu { display: none; }
+    @media (max-width: 800px) {
+      nav { position: absolute; inset: 60px 0 auto 0; border-bottom: 1px solid var(--border); background: var(--bg); display: none; }
+      nav.open { display: block; }
+      nav .container { display: grid; grid-template-columns: 1fr; gap: .75rem; padding-bottom: 12px; }
+      nav a { margin: 0; padding: 8px 0; }
+      .menu { display: inline-flex; }
+    }
+
+    /* ---------- Hero ---------- */
+    .hero { padding-top: 60px; }
+    .hero-inner { display: grid; gap: 24px; align-items: center; grid-template-columns: 1.2fr .8fr; }
+    @media (max-width: 900px) { .hero-inner { grid-template-columns: 1fr; } }
+    .hero-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .lead { font-size: 1.05rem; color: var(--muted); max-width: 60ch; }
+    .actions { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 18px; }
+
+    .btn { display: inline-flex; align-items: center; gap: .5rem; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--primary); background: var(--primary); color: white; font-weight: 700; text-decoration: none; box-shadow: var(--shadow); }
+    .btn:hover { filter: saturate(105%); text-decoration: none; }
+    .btn.outline { background: transparent; color: var(--text); border-color: var(--border); }
+    .btn.ghost { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+    .btn.sm { padding: 8px 12px; font-size: .9rem; }
+
+    .avatar {
+      aspect-ratio: 1/1; border-radius: 24px; border: 1px solid var(--border); overflow: hidden; background: linear-gradient(135deg, color-mix(in oklab, var(--primary) 25%, transparent), transparent 60%), var(--card);
+    }
+    .avatar svg { width: 100%; height: 100%; }
+
+    .social { list-style: none; display: flex; gap: 10px; padding: 0; margin: 16px 0 0; }
+    .social a { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); box-shadow: var(--shadow); }
+
+    /* ---------- Cards / Grids ---------- */
+    .grid { display: grid; gap: 16px; }
+    .grid.auto { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: grid; }
+    .card-media { aspect-ratio: 16/9; background: linear-gradient(120deg, color-mix(in oklab, var(--primary) 18%, transparent), transparent 55%), repeating-linear-gradient(45deg, rgba(0,0,0,.05) 0 8px, transparent 8px 16px); border-bottom: 1px solid var(--border); }
+    .card-body { padding: 16px; display: grid; gap: 10px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { display: inline-block; font-size: .8rem; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); background: color-mix(in oklab, var(--card) 80%, var(--primary) 20%); }
+
+    /* ---------- Experience ---------- */
+    .timeline { border-left: 2px solid var(--border); padding-left: 16px; display: grid; gap: 18px; }
+    .timeline .item { position: relative; }
+    .timeline .item::before { content: ""; position: absolute; left: -10px; top: 6px; width: 10px; height: 10px; background: var(--primary); border-radius: 999px; box-shadow: 0 0 0 5px color-mix(in oklab, var(--primary) 25%, transparent); }
+
+    /* ---------- Footer ---------- */
+    footer { border-top: 1px solid var(--border); padding: 22px 0; color: var(--muted); }
+    .tiny { font-size: .9rem; }
+
+    /* ---------- Utilities ---------- */
+    .muted { color: var(--muted); }
+    .mt-0 { margin-top: 0; } .mb-0 { margin-bottom: 0; } .mt-1 { margin-top: .25rem; }
+    .stack { display: grid; gap: 8px; }
+    .wrap { display: flex; flex-wrap: wrap; gap: .5rem .75rem; }
+
+    /* Offset in-page anchors for sticky header */
+    :target { scroll-margin-top: 80px; }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+  <header>
+    <div class="container navwrap">
+      <a class="brand" href="#home" aria-label="Homepage">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Your Name</span>
+      </a>
+      <div class="controls">
+        <button id="themeToggle" class="iconbtn" aria-label="Toggle theme" title="Toggle theme">
+          <!-- sun/moon icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/><circle cx="12" cy="12" r="4"/></svg>
+        </button>
+        <button id="menuToggle" class="iconbtn menu" aria-expanded="false" aria-controls="siteNav" aria-label="Toggle menu" title="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav id="siteNav" aria-label="Main navigation">
+      <div class="container">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="content">
+    <!-- Hero -->
+    <section id="home" class="hero section">
+      <div class="container hero-inner">
+        <div class="stack">
+          <span class="eyebrow">Portfolio</span>
+          <h1 class="h1">Hi, I'm <span style="color:var(--primary)">Your Name</span>.<br/>I build clean, reliable products.</h1>
+          <p class="lead">Short tagline about what you do. Example: Embedded systems & IoT engineer crafting robust telemetry, automation, and dashboards.</p>
+          <div class="actions">
+            <a class="btn" href="#projects" aria-label="View projects">View Projects</a>
+            <a class="btn outline" href="/resume.pdf" download>Download Résumé</a>
+            <a class="btn ghost" href="#contact">Contact</a>
+          </div>
+          <ul class="social" aria-label="Social links">
+            <li><a href="mailto:you@example.com" aria-label="Email">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg>
+            </a></li>
+            <li><a href="https://github.com/yourname" target="_blank" rel="noopener" aria-label="GitHub">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12 11.5 11.5 0 0 0 8.3 23.2c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.3.1 2 .9 2 .9 1.2 2 3.1 1.4 3.8 1.1.1-.9.5-1.4.8-1.8-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.2 1.2.9-.2 1.8-.4 2.7-.4s1.8.1 2.7.4c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.5-2.7 5.5-5.3 5.8.5.4.9 1.2.9 2.4v3.6c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+            </a></li>
+            <li><a href="https://www.linkedin.com/in/yourname" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5.001 2.5 2.5 0 0 0 0-5zM3 9h4v12H3zM14.5 9A4.5 4.5 0 0 0 10 13.5V21h4v-6.5a2.5 2.5 0 0 1 5 0V21h4v-7.5A6.5 6.5 0 0 0 14.5 9z"/></svg>
+            </a></li>
+          </ul>
+        </div>
+        <div class="avatar" aria-hidden="true">
+          <!-- Placeholder avatar tile (replace with your image) -->
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
+            <defs>
+              <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stop-color="var(--primary)"/>
+                <stop offset="100%" stop-color="color-mix(in oklab, var(--primary) 20%, transparent)"/>
+              </linearGradient>
+            </defs>
+            <rect width="200" height="200" fill="url(#g)"/>
+            <circle cx="100" cy="78" r="34" fill="var(--primary-ink)"/>
+            <rect x="40" y="120" width="120" height="60" rx="30" fill="var(--primary-ink)"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section">
+      <div class="container">
+        <h2 class="h2">About</h2>
+        <div class="grid" style="grid-template-columns: 1.2fr .8fr; gap: 20px;">
+          <div class="hero-card">
+            <p class="mt-0">Write 3–5 concise sentences about who you are, what you do, and the problems you love solving. Mention your tools, domains, or industries.</p>
+            <ul class="mt-1">
+              <li><strong>Location:</strong> Your City</li>
+              <li><strong>Focus:</strong> e.g., Embedded Systems · IoT · Automation</li>
+              <li><strong>Currently:</strong> Open to opportunities / Freelance / Full-time</li>
+            </ul>
+            <div class="actions"><a class="btn sm" href="#contact">Work with me</a></div>
+          </div>
+          <div class="card" style="padding:16px;">
+            <p class="muted mb-0">Highlights</p>
+            <ul class="mt-1">
+              <li>Delivered <strong>Project Alpha</strong>: 6k+ devices deployed.</li>
+              <li>Built a dashboard used by <strong>multiple teams</strong>.</li>
+              <li>Optimized <strong>connectivity &amp; telemetry</strong> to cut costs by 30%.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="stack" style="margin-bottom:10px;">
+          <h2 class="h2">Projects</h2>
+          <p class="muted mt-0">A few recent things I'm proud of. Replace with your own.</p>
+        </div>
+        <div class="grid auto">
+          <article class="card">
+            <div class="card-media" role="img" aria-label="Project cover"></div>
+            <div class="card-body">
+              <h3 class="mt-0">Project One</h3>
+              <p class="muted">One‑sentence summary of the outcome and impact. What changed for users or the business?</p>
+              <div class="tags">
+                <span class="tag">ESP32</span><span class="tag">MQTT</span><span class="tag">AWS</span>
+              </div>
+              <div class="actions">
+                <a class="btn sm" href="#" target="_blank" rel="noopener">Live</a>
+                <a class="btn sm outline" href="#" target="_blank" rel="noopener">Code</a>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media" role="img" aria-label="Project cover"></div>
+            <div class="card-body">
+              <h3 class="mt-0">Project Two</h3>
+              <p class="muted">What problem did you tackle, and how did you measure success?</p>
+              <div class="tags"><span class="tag">Python</span><span class="tag">Modbus</span><span class="tag">Grafana</span></div>
+              <div class="actions">
+                <a class="btn sm" href="#" target="_blank" rel="noopener">Case Study</a>
+                <a class="btn sm outline" href="#" target="_blank" rel="noopener">Repo</a>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media" role="img" aria-label="Project cover"></div>
+            <div class="card-body">
+              <h3 class="mt-0">Project Three</h3>
+              <p class="muted">Keep it short. Use verbs. Emphasize the result.</p>
+              <div class="tags"><span class="tag">C/C++</span><span class="tag">FreeRTOS</span><span class="tag">LTE</span></div>
+              <div class="actions">
+                <a class="btn sm" href="#" target="_blank" rel="noopener">Demo</a>
+                <a class="btn sm outline" href="#" target="_blank" rel="noopener">Docs</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section id="experience" class="section">
+      <div class="container">
+        <h2 class="h2">Experience</h2>
+        <div class="timeline">
+          <div class="item">
+            <h3 class="mt-0">Role · Company <span class="muted">(2023 — Present)</span></h3>
+            <p class="muted">One or two lines about scope, leadership, and measurable outcomes.</p>
+          </div>
+          <div class="item">
+            <h3 class="mt-0">Role · Company <span class="muted">(2021 — 2023)</span></h3>
+            <p class="muted">What you shipped, who you collaborated with, and how it moved the needle.</p>
+          </div>
+          <div class="item">
+            <h3 class="mt-0">Role · Company <span class="muted">(2019 — 2021)</span></h3>
+            <p class="muted">Keep bullets crisp; avoid long paragraphs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="section">
+      <div class="container">
+        <h2 class="h2">Skills</h2>
+        <div class="wrap">
+          <span class="tag">C/C++</span>
+          <span class="tag">Python</span>
+          <span class="tag">FreeRTOS</span>
+          <span class="tag">ESP32</span>
+          <span class="tag">Modbus / RS‑485</span>
+          <span class="tag">MQTT</span>
+          <span class="tag">AWS</span>
+          <span class="tag">Linux</span>
+          <span class="tag">Dashboards</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section">
+      <div class="container">
+        <h2 class="h2">Contact</h2>
+        <div class="grid auto">
+          <div class="card" style="padding:16px;">
+            <p class="mt-0">Best way to reach me:</p>
+            <p class="lead"><a href="mailto:you@example.com">you@example.com</a></p>
+            <div class="actions">
+              <a class="btn" href="mailto:you@example.com?subject=Hello%20there">Email me</a>
+              <a class="btn outline" href="https://cal.com/yourname" target="_blank" rel="noopener">Book a call</a>
+            </div>
+          </div>
+          <div class="card" style="padding:16px;">
+            <p class="mt-0">Elsewhere:</p>
+            <ul>
+              <li><a href="https://github.com/yourname" target="_blank" rel="noopener">GitHub</a></li>
+              <li><a href="https://www.linkedin.com/in/yourname" target="_blank" rel="noopener">LinkedIn</a></li>
+              <li><a href="#">Twitter / X</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container tiny">© <span id="y"></span> Your Name. Built as a single file. <span class="muted">Fast to host on GitHub Pages / Netlify.</span></div>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Theme toggle with persistence
+    (function() {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const stored = localStorage.getItem('theme');
+      if (stored === 'dark' || stored === 'light') root.setAttribute('data-theme', stored);
+      btn.addEventListener('click', () => {
+        const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+      });
+    })();
+
+    // Mobile menu toggle
+    (function() {
+      const menuBtn = document.getElementById('menuToggle');
+      const nav = document.getElementById('siteNav');
+      menuBtn.addEventListener('click', () => {
+        const isOpen = nav.classList.toggle('open');
+        menuBtn.setAttribute('aria-expanded', String(isOpen));
+      });
+      // Close on link click (mobile)
+      nav.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A' && nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          menuBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })();
+
+    // Active link on scroll
+    (function() {
+      const sections = ['about','projects','experience','skills','contact'];
+      const links = sections.map(id => ({ id, el: document.querySelector(`nav a[href="#${id}"]`) }));
+      const opt = { rootMargin: '-50% 0px -50% 0px', threshold: 0 };
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(ent => {
+          const link = links.find(l => `#${l.id}` === `#${ent.target.id}`)?.el;
+          if (!link) return;
+          if (ent.isIntersecting) { link.classList.add('active'); }
+          else { link.classList.remove('active'); }
+        });
+      }, opt);
+      sections.forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
+    })();
+  </script>
+</body>
+</html>
